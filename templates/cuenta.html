@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuenta de Billetera Virtual</title>
+    <link rel="stylesheet" href="/static/styles/cuenta.css">
+</head>
+<body>
+    <div class="container">
+        <h1 id="titulo-cuenta">Cuenta de Billetera Virtual</h1>
+        <h2>Saldo disponible</h2>
+        <p id="saldo">$ {{ cuenta.saldo }}</p>
+        <h2>Tus tarjetas</h2>
+        <div class="card-details">
+            <p id="tarjeta">{{ cuenta.nombretarjeta }}</p>
+            <p id="nrotarjeta">{{ cuenta.nrotarjeta }}</p>
+            <p id="clavetarjeta">{{ cuenta.clavetarjeta }}</p>
+            <p id="vencimientotarjeta">{{ cuenta.vencimientotarjeta }}</p>
+            <p id="nombre">{{ cuenta.username }}</p>
+            <img id="logotarjeta" src="/static/images/logo_tarjeta.png">
+        </div>
+
+        <div class="transacciones">
+            <h2>Historial de Transacciones</h2>
+            <ul>
+                {% for transaccion in cuenta.transacciones %}
+                    <li id="transaccion"><p>{{ transaccion.monto }} </p> <div><img id="logo-eye" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/visible--v1.png" alt="visible--v1"/> <img id="logo-trash" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/trash--v1.png" alt="trash--v1"/></div></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <button id="btn-hacer-transaccion">Realizar Transaccion</button>
+    </div>
+</body>
+</html>

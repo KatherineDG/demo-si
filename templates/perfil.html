@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+    <link rel="stylesheet" href="/static/styles/perfil.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Tu perfil</h1>
+        <div id="perfil">
+            <p><img width="64" height="64" src="https://img.icons8.com/pastel-glyph/64/person-male--v3.png" alt="person-male--v3"/><strong>Nombre:</strong> {{ perfil.nombre }}</p>
+            <p><img width="50" height="50" src="https://img.icons8.com/ios-filled/50/marker.png" alt="marker"/><strong>Dirección:</strong> {{ perfil.direccion }}</p>
+            <p><img width="50" height="50" src="https://img.icons8.com/ios-filled/50/phone.png" alt="phone"/><strong>Teléfono:</strong> {{ perfil.telefono }}</p>
+        </div>
+    </div>
+
+</body>
+</html>

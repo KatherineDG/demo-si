@@ -10,6 +10,10 @@ db = client['demosidb']
 users_collection = db['usuarios']
 app.secret_key = 'your_secret_key'
 
+
+app.static_folder = 'static' 
+
+
 # Esta variable almacenará los IDs de sesión
 session_ids = {}
 
@@ -55,6 +59,54 @@ def home():
 def get_username_from_session():
     session_id = request.cookies.get('session_id')
     return session_ids.get(session_id)
+
+
+
+@app.route('/perfil')
+def perfil():
+    username = get_username_from_session()
+    if username:
+        user = users_collection.find_one({'username': username})
+        if user:
+            perfil_usuario = {
+                'nombre': user.get('username', 'Nombre no proporcionado'),
+                'direccion': user.get('direccion', 'Dirección no proporcionada'),
+                'telefono': user.get('telefono', 'Teléfono no proporcionado')
+            }
+            return render_template('perfil.html', perfil=perfil_usuario)
+        else:
+            return 'Usuario no encontrado'
+    else:
+        return redirect('/login')
+
+
+@app.route('/cuenta')
+def cuenta_billetera():
+    username = get_username_from_session()
+    if username:
+        user = users_collection.find_one({'username': username})
+        if user:
+            cuenta = {
+                'username': user['username'],
+                'nrotarjeta': user['nrotarjeta'],
+                'clavetarjeta': user['clavetarjeta'],
+                'nombretarjeta': user['nombretarjeta'],
+                'vencimientotarjeta': user['vencimientotarjeta'],
+                'saldo': user['saldo'],
+                'transacciones': [
+                    {'monto': user['transaccion1'], 'descripcion': 'Transacción 1'},
+                    {'monto': user['transaccion2'], 'descripcion': 'Transacción 2'},
+                    {'monto': user['transaccion3'], 'descripcion': 'Transacción 3'}
+                ]
+            }
+            return render_template('cuenta.html', cuenta=cuenta)
+        else:
+            return 'Usuario no encontrado'
+    else:
+        return redirect('/login')
+
+
+
 
 def run_app(port):
     app.run(port=port)

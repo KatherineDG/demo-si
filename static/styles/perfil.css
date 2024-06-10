@@ -1,0 +1,35 @@
+@font-face {
+    font-family: 'Credit Card Title';
+    src: url('/static/fonts/Ballega.otf');
+}
+
+@font-face {
+    font-family: 'Poppins Semibold';
+    src: url('/static/fonts/Poppins-SemiBold.ttf');
+}
+
+h1{
+    font-family: 'Credit Card Title';
+    font-size: 2em;
+    background-color: #471dbc;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: 0 20% 0 20%;
+}
+
+p{
+    font-size: x-large;
+    font-family: 'Poppins Semibold';
+}
+
+p img{
+    width: 5%;
+    height: 5%;
+    margin-right: 10px;
+}
