@@ -134,28 +134,33 @@ def procesar_transaccion():
         return redirect('/login')
     
 
-@app.route('/eliminar-transaccion', methods=['POST'])
+@app.route('/eliminar-transaccion', methods=['DELETE'])
 def eliminar_transaccion():
+    # Suponiendo que get_username_from_session() es una función que obtiene el nombre de usuario de la sesión
     username = get_username_from_session()
     transaccion = request.json.get('transaccion')
-    
+    print(transaccion)
+
     if not username:
         return redirect('/login')
     
     # Buscar el usuario en la base de datos
     user = users_collection.find_one({'username': username})
     if not user:
-        return 'Usuario no encontrado'
+        return 'Usuario no encontrado', 404
     
     if transaccion:
         # Eliminar la transacción de la lista de transacciones del usuario en la base de datos
-        users_collection.update_one(
+        result = users_collection.update_one(
             {'username': username},
             {'$pull': {'transacciones': transaccion}}
         )
-
+        
+        if result.modified_count == 0:
+            return 'Transacción no encontrada', 404
     
-    return redirect("/cuenta")
+    # Redirigir a la cuenta del usuario después de eliminar la transacción
+    return redirect('/cuenta')
 
 
 
