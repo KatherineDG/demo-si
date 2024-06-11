@@ -20,9 +20,7 @@ session_ids = {}
 @app.route('/')
 def index():
     username = get_username_from_session()
-    if username:
-        return f'¡Hola de nuevo, {username}! <a href="/home">Ir al Home</a> | <a href="/logout">Cerrar sesión</a>'
-    return '¡Bienvenido! <a href="/login">Iniciar sesión</a>'
+    return render_template('index.html', username=username)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():

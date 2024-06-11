@@ -1,17 +1,27 @@
+<!-- templates/home.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio</title>
+    <link rel="stylesheet" href="/static/styles/styles.css">
 </head>
 <body>
-    <h1>Bienvenido al HomeBanking</h1>
-    <p>¡Hola, {{username}}! Bienvenido a nuestro servicio de HomeBanking.</p>
-    <p>Aquí puedes gestionar tus finanzas de manera rápida y segura desde la comodidad de tu hogar.</p>
-    <p>Explora nuestras opciones y descubre cómo podemos ayudarte a administrar tu dinero de forma eficiente.</p>
-    <a href="/perfil">Ver mi perfil</a>
-    <a href="/cuenta">Mi cuenta</a>
-    <a href="/logout">Cerrar sesión</a>
+    <div class="form-container-home">
+        <h1>Bienvenido al HomeBanking</h1>
+        <p>¡Hola, {{username}}! Bienvenido a nuestro servicio de HomeBanking.</p>
+        <p>Aquí puedes gestionar tus finanzas de manera rápida y segura desde la comodidad de tu hogar.</p>
+        <p>Explora nuestras opciones y descubre cómo podemos ayudarte a administrar tu dinero de forma eficiente.</p>
+        <form action="/perfil" method="GET">
+            <button type="submit">Ver mi perfil</button>
+        </form>
+        <form action="/cuenta" method="GET">
+            <button type="submit">Mi cuenta</button>
+        </form>
+        <form action="/logout" method="GET">
+            <button type="submit">Cerrar sesión</button>
+        </form>
+    </div>
 </body>
 </html>

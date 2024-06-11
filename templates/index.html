@@ -1,0 +1,23 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio</title>
+    <link rel="stylesheet" href="/static/styles/styles.css">
+</head>
+<body>
+        {% if username %}
+            <div class="form-container">
+                <p class="welcome-message">¡Hola de nuevo, {{ username }}!</p>
+                <br>
+                <p class="options">
+                    <a href="/home">Ir al Home</a> | <a href="/logout">Cerrar sesión</a>
+                </p>
+            </div>
+        {% else %}
+            <p class="welcome-message">¡Bienvenido! <a href="/login">Iniciar sesión</a></p>
+        {% endif %}
+</body>
+</html>
