@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cuenta de Billetera Virtual</title>
     <link rel="stylesheet" href="/static/styles/cuenta.css">
+
 </head>
 <body>
     <div class="container">
@@ -25,11 +26,48 @@
             <h2>Historial de Transacciones</h2>
             <ul>
                 {% for transaccion in cuenta.transacciones %}
-                    <li id="transaccion"><p>{{ transaccion.monto }} </p> <div><img id="logo-eye" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/visible--v1.png" alt="visible--v1"/> <img id="logo-trash" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/trash--v1.png" alt="trash--v1"/></div></li>
+                    <li  id="transaccion-{{ transaccion }}" class="transaccion">{{ transaccion }} <div><img id="logo-eye" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/visible--v1.png" alt="visible--v1"/> <img onclick="eliminarTransaccion('{{ transaccion }}')" id="logo-trash" width="30" height="30" src="https://img.icons8.com/ios-glyphs/30/trash--v1.png" alt="trash--v1"/></div></li>
                 {% endfor %}
             </ul>
         </div>
-        <button id="btn-hacer-transaccion">Realizar Transaccion</button>
+        <button id="btn-hacer-transaccion" onclick="mostrarFormulario()">Realizar Transaccion</button>
+
+        <div id="contenedor-formulario">
+            <form id="formulario-transaccion" action="/procesar-transaccion" method="post" style="display:none;">
+                <label for="nombre">Nombre:</label>
+                <input type="text" id="nombre" name="nombre" required>
+                <br>
+                <label for="monto">Monto:</label>
+                <input type="number" id="monto" name="monto" required>
+                <br>
+                <button id="btn-enviar-monto" "submit">Enviar</button>
+            </form>
+        </div>
     </div>
 </body>
+
+<script>
+    function mostrarFormulario() {
+        document.getElementById('formulario-transaccion').style.display = 'block';
+    }
+
+    function eliminarTransaccion(transaccion) {
+            fetch('/eliminar-transaccion', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ transaccion: transaccion })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Eliminar la transacción del DOM
+                    document.getElementById('transaccion-' + transaccion).remove();
+                } else {
+                    alert('Error al eliminar la transacción');
+                }
+            });
+        }
+</script>
 </html>

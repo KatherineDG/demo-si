@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, make_response
+from flask import Flask, render_template, request, redirect, make_response, url_for
 from pymongo import MongoClient
 from threading import Thread
 import uuid  # Módulo para generar IDs únicos
@@ -91,17 +91,71 @@ def cuenta_billetera():
                 'nombretarjeta': user['nombretarjeta'],
                 'vencimientotarjeta': user['vencimientotarjeta'],
                 'saldo': user['saldo'],
-                'transacciones': [
-                    {'monto': user['transaccion1'], 'descripcion': 'Transacción 1'},
-                    {'monto': user['transaccion2'], 'descripcion': 'Transacción 2'},
-                    {'monto': user['transaccion3'], 'descripcion': 'Transacción 3'}
-                ]
+                'transacciones': user.get('transacciones', [])
             }
             return render_template('cuenta.html', cuenta=cuenta)
         else:
             return 'Usuario no encontrado'
     else:
         return redirect('/login')
+
+
+@app.route('/procesar-transaccion', methods=['POST'])
+def procesar_transaccion():
+    nombre = request.form['nombre']
+    monto = float(request.form['monto'])
+     # Obtener el nombre de usuario de la sesión
+    username = get_username_from_session()
+    if username:
+        # Buscar el usuario en la base de datos
+        user = users_collection.find_one({'username': username})
+        if user:
+            # Verificar si hay saldo suficiente para la transacción
+            saldo_actual = user.get('saldo', 0)
+            if saldo_actual >= monto:
+                # Actualizar el saldo en la base de datos
+                nuevo_saldo = saldo_actual - monto
+                users_collection.update_one(
+                    {'username': username},
+                    {'$set': {'saldo': nuevo_saldo}}
+                )
+            # Crear la nueva transacción en el formato especificado
+            nueva_transaccion = f"${monto} {nombre}"
+            # Actualizar la lista de transacciones del usuario
+            users_collection.update_one(
+                {'username': username},
+                {'$push': {'transacciones': nueva_transaccion}}
+            )
+            
+            return redirect('/cuenta')
+        else:
+            return 'Usuario no encontrado'
+    else:
+        return redirect('/login')
+    
+
+@app.route('/eliminar-transaccion', methods=['POST'])
+def eliminar_transaccion():
+    username = get_username_from_session()
+    transaccion = request.json.get('transaccion')
+    
+    if not username:
+        return redirect('/login')
+    
+    # Buscar el usuario en la base de datos
+    user = users_collection.find_one({'username': username})
+    if not user:
+        return 'Usuario no encontrado'
+    
+    if transaccion:
+        # Eliminar la transacción de la lista de transacciones del usuario en la base de datos
+        users_collection.update_one(
+            {'username': username},
+            {'$pull': {'transacciones': transaccion}}
+        )
+
+    
+    return redirect("/cuenta")
 
 
 
